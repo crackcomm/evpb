@@ -7,7 +7,7 @@ type Consumer func(proto.Message) error
 
 // Interface - evpb interface.
 type Interface interface {
-	// Send - Send message.
+	// Send - Sends message.
 	Send(proto.Message) error
 
 	// Consume - Registers message consumer.

@@ -1,6 +1,6 @@
 # evpb
 
-[Protobuf](https://github.com/golang/protobuf/) queue production and consumption.
+[Protobuf](https://github.com/golang/protobuf/) events production and consumption.
 
 ## queues
 

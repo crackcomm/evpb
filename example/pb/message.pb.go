@@ -43,15 +43,12 @@ func (*Movie) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
 func init() {
 	proto.RegisterType((*Movie)(nil), "evpb.example.Movie")
 }
-
-// pkg ::
 func RegisterMovieConsumer(q evpb.Interface, h func(*Movie) error) error {
 	return q.Consume(new(Movie), func(msg proto.Message) error {
 		return h(msg.(*Movie))
 	})
 }
 
-// ESTESTESTSETSETSETSETSETSTs :: Movie
 var fileDescriptor0 = []byte{
 	// 137 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xe2, 0x32, 0x4a, 0xcf, 0x2c, 0xc9,
