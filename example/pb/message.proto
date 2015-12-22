@@ -1,0 +1,21 @@
+//
+// Copyright 2015, Łukasz Kurowski <crackcomm@gmail.com>
+// All rights reserved.
+//
+
+syntax = "proto3";
+
+package evpb.example;
+
+option go_package = "pb";
+
+message Movie {
+  // Id - Id of movie to find.
+  string id = 1;
+
+  // Title - Movie title.
+  string title = 2;
+
+  // Year - Movie year.
+  uint32 year = 3;
+}
