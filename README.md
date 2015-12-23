@@ -1,5 +1,7 @@
 # evpb
 
+[![GoDoc](https://godoc.org/github.com/crackcomm/evpb?status.svg)](https://godoc.org/github.com/crackcomm/evpb) [![Circle CI](https://img.shields.io/circleci/project/crackcomm/evpb.svg)](https://circleci.com/gh/crackcomm/evpb)
+
 [Protobuf](https://github.com/golang/protobuf/) events production and consumption.
 
 This library was designed only with protobuf messages in mind but it has `[]byte`
