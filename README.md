@@ -34,7 +34,9 @@ func consumer(movie *pb.Movie) (err error) {
 
 func main() {
 	// Create new NSQ consumer with default nsq addr
-	queue := nsqpb.New()
+	queue := nsqpb.New(
+		nsqpb.WithAddrs("127.0.0.1:4150"),
+	)
 
 	// Register movies consumer
 	// without generating: would need a type casting

@@ -18,7 +18,6 @@ func New(opts ...Option) evpb.Interface {
 		concurrency: 1,
 		consumers:   make(map[string]*nsq.Consumer),
 		channel:     defaultChannel,
-		addrsNsq:    []string{"127.0.0.1:4150"},
 	}
 	for _, opt := range opts {
 		opt(c)
