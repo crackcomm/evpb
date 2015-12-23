@@ -2,6 +2,7 @@ package nsqpb
 
 import (
 	"errors"
+	"strings"
 	"sync"
 
 	"github.com/nsqio/go-nsq"
@@ -31,6 +32,8 @@ func New(opts ...Option) evpb.Interface {
 type queue struct {
 	config *nsq.Config
 
+	topicPrefix string
+
 	addrsNsqlookup []string
 	addrsNsq       []string
 
@@ -54,11 +57,11 @@ func (q *queue) Send(topic string, body []byte) (err error) {
 	if err != nil {
 		return
 	}
-	return q.producer.Publish(topic, body)
+	return q.producer.Publish(q.topic(topic), body)
 }
 
 func (q *queue) Consume(topic string, consumer evpb.Consumer) (err error) {
-	cons, err := nsq.NewConsumer(topic, q.channel, q.config)
+	cons, err := nsq.NewConsumer(q.topic(topic), q.channel, q.config)
 	if err != nil {
 		return
 	}
@@ -82,4 +85,11 @@ func (q *queue) Stop() (err error) {
 		cons.Stop()
 	}
 	return
+}
+
+func (q *queue) topic(t string) string {
+	if q.topicPrefix == "" {
+		return t
+	}
+	return strings.Join([]string{q.topicPrefix, t}, "")
 }

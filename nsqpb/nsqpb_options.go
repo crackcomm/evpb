@@ -5,6 +5,13 @@ import "github.com/nsqio/go-nsq"
 // Option - Queue option.
 type Option func(*queue)
 
+// WithTopicPrefix - Sets nsq topic prefix.
+func WithTopicPrefix(topicPrefix string) Option {
+	return func(c *queue) {
+		c.topicPrefix = topicPrefix
+	}
+}
+
 // WithChannel - Sets queue channel.
 func WithChannel(channel string) Option {
 	return func(c *queue) {
