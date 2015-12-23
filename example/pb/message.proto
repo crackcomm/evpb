@@ -19,3 +19,7 @@ message Movie {
   // Year - Movie year.
   uint32 year = 3;
 }
+
+message Video {
+  string url = 1;
+}

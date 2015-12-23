@@ -4,7 +4,6 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/nsqio/go-nsq"
 
 	"github.com/crackcomm/evpb"
@@ -45,34 +44,27 @@ type queue struct {
 	producer     *nsq.Producer
 }
 
-func (q *queue) Send(msg proto.Message) (err error) {
+func (q *queue) Send(topic string, body []byte) (err error) {
 	if len(q.addrsNsq) == 0 {
 		return errors.New("At least one nsq address is required to create a producer")
 	}
-
 	q.producerOnce.Do(func() {
 		q.producer, err = nsq.NewProducer(q.addrsNsq[0], q.config)
 	})
 	if err != nil {
 		return
 	}
-
-	body, err := proto.Marshal(msg)
-	if err != nil {
-		return
-	}
-
-	topic := proto.MessageName(msg)
 	return q.producer.Publish(topic, body)
 }
 
-func (q *queue) Consume(msg proto.Message, consumer evpb.Consumer) (err error) {
-	topic := proto.MessageName(msg)
+func (q *queue) Consume(topic string, consumer evpb.Consumer) (err error) {
 	cons, err := nsq.NewConsumer(topic, q.channel, q.config)
 	if err != nil {
 		return
 	}
-	cons.AddConcurrentHandlers(&handler{Consumer: consumer, Message: msg}, q.concurrency)
+	cons.AddConcurrentHandlers(nsq.HandlerFunc(func(msg *nsq.Message) error {
+		return consumer(msg.Body)
+	}), q.concurrency)
 	err = cons.ConnectToNSQLookupds(q.addrsNsqlookup)
 	if err != nil {
 		return
@@ -90,18 +82,4 @@ func (q *queue) Stop() (err error) {
 		cons.Stop()
 	}
 	return
-}
-
-type handler struct {
-	proto.Message
-	evpb.Consumer
-}
-
-func (h *handler) HandleMessage(message *nsq.Message) (err error) {
-	msg := proto.Clone(h.Message)
-	err = proto.Unmarshal(message.Body, msg)
-	if err != nil {
-		return
-	}
-	return h.Consumer(msg)
 }

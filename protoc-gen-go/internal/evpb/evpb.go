@@ -76,11 +76,26 @@ func (g *evpb) Generate(file *generator.FileDescriptor) {
 	}
 
 	for _, msg := range fd.MessageType {
-
-		g.P("func Register", msg.GetName(), "Consumer(q ", evpbPkg, ".Interface, h func(*", msg.GetName(), ") error) error {")
-		g.P("  return q.Consume(new(", msg.GetName(), "), func(msg proto.Message) error {")
-		g.P("    return h(msg.(*", msg.GetName(), "))")
+		g.P()
+		g.P("var topicName", msg.GetName(), " = ", `"`, fd.GetPackage(), ".", msg.GetName(), `"`)
+		g.P()
+		g.P("func Consume", msg.GetName(), "(q ", evpbPkg, ".Interface, h func(*", msg.GetName(), ") error) error {")
+		g.P("  return q.Consume(topicName", msg.GetName(), ", func(body []byte) error {")
+		g.P("    msg := new(", msg.GetName(), ")")
+		g.P("    if err := proto.Unmarshal(body, msg); err != nil {")
+		g.P("        return err")
+		g.P("    }")
+		g.P("    return h(msg)")
 		g.P("  })")
 		g.P("}")
+		g.P()
+		g.P("func Send", msg.GetName(), "(q ", evpbPkg, ".Interface, msg *", msg.GetName(), ") error {")
+		g.P("  body, err := proto.Marshal(msg)")
+		g.P("  if err != nil {")
+		g.P("    return err")
+		g.P("  }")
+		g.P("  return q.Send(topicName", msg.GetName(), ", body)")
+		g.P("}")
+		g.P()
 	}
 }
