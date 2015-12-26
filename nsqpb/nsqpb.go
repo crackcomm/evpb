@@ -12,7 +12,7 @@ import (
 
 var defaultChannel = "default"
 
-// New - Creates evpb on nsq.
+// New - Creates new nsq evpb.Interface.
 func New(opts ...Option) evpb.Interface {
 	c := &queue{
 		concurrency: 1,
@@ -59,13 +59,13 @@ func (q *queue) Send(topic string, body []byte) (err error) {
 	return q.producer.Publish(q.topic(topic), body)
 }
 
-func (q *queue) Consume(topic string, consumer evpb.Consumer) (err error) {
+func (q *queue) Consume(topic string, consume evpb.Consumer) (err error) {
 	cons, err := nsq.NewConsumer(q.topic(topic), q.channel, q.config)
 	if err != nil {
 		return
 	}
 	cons.AddConcurrentHandlers(nsq.HandlerFunc(func(msg *nsq.Message) error {
-		return consumer(msg.Body)
+		return consume(msg.Body)
 	}), q.concurrency)
 	err = cons.ConnectToNSQLookupds(q.addrsNsqlookup)
 	if err != nil {
@@ -76,7 +76,7 @@ func (q *queue) Consume(topic string, consumer evpb.Consumer) (err error) {
 		return
 	}
 	q.consumers[topic] = cons
-	return nil
+	return
 }
 
 func (q *queue) Stop() (err error) {
