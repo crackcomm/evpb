@@ -31,4 +31,4 @@
 
 package main
 
-import _ "github.com/crackcomm/evpb/protoc-gen-go/internal/evpb"
+import _ "github.com/crackcomm/evpb/protoc-gen-goevpb/internal/evpb"
