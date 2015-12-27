@@ -3,7 +3,7 @@ package evpb
 import (
 	"reflect"
 
-	"github.com/golang/protobuf/proto"
+	"github.com/gogo/protobuf/proto"
 )
 
 // ProtoConsumer - evpb protobuf message consumer interface

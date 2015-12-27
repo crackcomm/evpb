@@ -35,7 +35,7 @@ import (
 	"path"
 	"strconv"
 
-	"github.com/golang/protobuf/protoc-gen-go/generator"
+	"github.com/gogo/protobuf/protoc-gen-gogo/generator"
 )
 
 func init() {
