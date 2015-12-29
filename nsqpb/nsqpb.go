@@ -83,6 +83,7 @@ func (q *queue) Stop() (err error) {
 	for _, cons := range q.consumers {
 		cons.Stop()
 	}
+	q.producer.Stop()
 	return
 }
 
