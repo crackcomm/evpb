@@ -4,9 +4,8 @@
 package chanpb
 
 import (
-	"github.com/tower-services/utils/syncmap"
-
 	"github.com/crackcomm/evpb"
+	"github.com/crackcomm/evpb/syncmap"
 )
 
 // Option - Queue option.
