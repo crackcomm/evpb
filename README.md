@@ -67,6 +67,23 @@ func main() {
 }
 ```
 
+### Install
+
+```sh
+$ go get -u github.com/gogo/protobuf/...
+$ go get -u github.com/crackcomm/evpb/protoc-gen-goevpb
+```
+
+### Compile
+
+```sh
+$ protoc -I${GOPATH}/src \
+	--goevpb_out=plugins=evpb:${GOPATH}/src \
+	${GOPATH}/src/${REPO}/example/pb/messages.proto
+```
+
 ## queues
 
   * [nsq](http://nsq.io/)
+  * channels (in-memory)
+  * http
