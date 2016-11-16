@@ -81,7 +81,7 @@ func (q *queue) Consume(topic string, consume evpb.Consumer) (err error) {
 		})
 		q.httpListen, err = net.Listen("tcp", q.listenAddr)
 		if err != nil {
-			return
+			panic(err)
 		}
 		q.httpServer = &http.Server{
 			Addr:         q.listenAddr,
