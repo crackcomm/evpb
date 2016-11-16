@@ -76,6 +76,9 @@ func (q *queue) Consume(topic string, consume evpb.Consumer) (err error) {
 		}
 	})
 	q.listenOnce.Do(func() {
+		q.serverMux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+			w.Write([]byte("OK"))
+		})
 		q.httpListen, err = net.Listen("tcp", q.listenAddr)
 		if err != nil {
 			return
